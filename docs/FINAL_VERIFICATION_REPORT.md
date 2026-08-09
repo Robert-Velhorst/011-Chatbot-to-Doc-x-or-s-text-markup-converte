@@ -28,7 +28,7 @@ The local product is implemented and verified. It is not represented as a signed
 | Gate | Result |
 | --- | --- |
 | Python formatting/lint | Ruff clean |
-| Python tests | 20 passed; one upstream Starlette `TestClient` deprecation warning |
+| Python tests | 21 passed; one upstream Starlette `TestClient` deprecation warning |
 | TypeScript | both extension and Studio type checks passed |
 | Extension tests | 6 passed across provider, normalizer, and copy-event suites |
 | Extension build | MV3 package built successfully |
@@ -39,6 +39,8 @@ The local product is implemented and verified. It is not represented as a signed
 | Docker | image built; container reached `healthy`; `/health` returned `ok`; authenticated HAI boundary returned `artifact_generation_only` |
 
 The PowerShell gates explicitly convert every nonzero native exit code into a script failure. This was added after the audit proved `$ErrorActionPreference` alone did not stop on a Ruff failure.
+
+The first GitHub run exposed an environment-specific test defect: the runner lacked Poppler and correctly returned `unverified`, while the test demanded `verified`. The test now verifies the truthful renderer-present and renderer-absent branches, and CI runs all Python tests rather than only the Studio folder.
 
 ## Windows 11 standalone evidence
 

@@ -7,7 +7,7 @@
 | Conversion core | complete | `src/studio/cleanpaste_studio` |
 | Local persistence/security | complete | `storage.py`, `security.py`, API tests |
 | UI implementation | complete and browser-verified | `studio-ui`, concept PNG, final report |
-| Unit/integration gates | complete | 6 Vitest plus 20 Python tests |
+| Unit/integration gates | complete | 6 Vitest plus 21 Python tests |
 | DOCX/PDF render proof | complete for sample | `work/studio-smoke-v2`, final report |
 | Browser core workflow | complete | final report and browser QA evidence |
 | Windows/Docker packaging | complete and smoke-tested | `dist`, final report |

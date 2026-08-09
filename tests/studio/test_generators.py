@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from cleanpaste_studio import verifier
 from cleanpaste_studio.generators import (
     generate_docx,
     generate_markdown,
@@ -8,7 +9,6 @@ from cleanpaste_studio.generators import (
 )
 from cleanpaste_studio.parser import parse_document
 from cleanpaste_studio.templates import get_profile
-from cleanpaste_studio.verifier import verify_pdf
 from docx import Document
 from pypdf import PdfReader
 
@@ -49,10 +49,24 @@ def test_all_generators_create_portable_files(tmp_path: Path):
 def test_pdf_verifier_renders_a_non_blank_preview(tmp_path: Path):
     parsed = sample_document()
     pdf = generate_pdf(parsed, get_profile("google_docs_default"), tmp_path / "fixture.pdf")
-    result = verify_pdf(pdf.path, tmp_path)
-    assert result.status == "verified"
+    result = verifier.verify_pdf(pdf.path, tmp_path)
     assert result.page_count == 1
-    assert result.preview_path and result.preview_path.is_file()
+    if verifier._find_pdftoppm():
+        assert result.status == "verified"
+        assert result.preview_path and result.preview_path.is_file()
+    else:
+        assert result.status == "unverified"
+        assert result.reason and "Poppler" in result.reason
+
+
+def test_pdf_verifier_is_truthful_without_a_renderer(tmp_path: Path, monkeypatch):
+    parsed = sample_document()
+    pdf = generate_pdf(parsed, get_profile("google_docs_default"), tmp_path / "fixture.pdf")
+    monkeypatch.setattr(verifier, "_find_pdftoppm", lambda: None)
+    result = verifier.verify_pdf(pdf.path, tmp_path)
+    assert result.status == "unverified"
+    assert result.page_count == 1
+    assert result.reason and "Poppler" in result.reason
 
 
 def test_unknown_template_fails_closed():
