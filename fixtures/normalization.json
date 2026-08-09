@@ -1,0 +1,18 @@
+[
+  {
+    "name": "structured-ai-response",
+    "sourceUrl": "https://chatgpt.com/c/example",
+    "html": "<article data-message-author-role=\"assistant\"><h2>Release plan</h2><p>Build <strong>clean output</strong> for <a href=\"https://example.com/guide?utm_source=ai&ref=chat\">editors</a>.</p><ul><li>Keep lists</li><li>Keep <code>code</code></li></ul><blockquote>Use semantic HTML.</blockquote><pre><code>npm run build</code></pre><button>Copy</button></article>",
+    "expectedHtml": "<h2>Release plan</h2><p>Build <strong>clean output</strong> for <a href=\"https://example.com/guide\">editors</a>.</p><ul><li>Keep lists</li><li>Keep <code>code</code></li></ul><blockquote>Use semantic HTML.</blockquote><pre><code>npm run build</code></pre>",
+    "plainTextIncludes": ["Release plan", "Build clean output for editors.", "- Keep lists", "- Keep code", "Use semantic HTML.", "npm run build"],
+    "rtfIncludes": ["\\b Release plan", "\\tab", "npm run build"]
+  },
+  {
+    "name": "malformed-and-ui-noise",
+    "sourceUrl": "https://claude.ai/new",
+    "html": "<div class=\"prose\"><p>Hello<script>alert(1)</script><span> world</span></p><div class=\"toolbar\"><button>Copy</button></div><img src=\"x\"><table><tr><th>Key</th><th>Value</th></tr><tr><td>A</td><td>B</td></tr></table></div>",
+    "expectedHtml": "<p>Hello world</p><table><tbody><tr><th>Key</th><th>Value</th></tr><tr><td>A</td><td>B</td></tr></tbody></table>",
+    "plainTextIncludes": ["Hello world", "Key", "Value", "A", "B"],
+    "rtfIncludes": ["Hello world", "Key", "Value"]
+  }
+]

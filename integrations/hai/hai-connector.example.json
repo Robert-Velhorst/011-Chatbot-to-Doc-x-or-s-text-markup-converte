@@ -1,0 +1,14 @@
+{
+  "id": "ai-clean-paste",
+  "display_name": "AI Clean Paste",
+  "base_url": "http://127.0.0.1:8765",
+  "authentication": {
+    "type": "bearer",
+    "secret_environment_variable": "CLEAN_PASTE_TOKEN"
+  },
+  "authority": "artifact_generation_only",
+  "capabilities_path": "/api/connectors/hai/v1/capabilities",
+  "convert_path": "/api/connectors/hai/v1/convert",
+  "health_path": "/health",
+  "read_only_external_systems": true
+}

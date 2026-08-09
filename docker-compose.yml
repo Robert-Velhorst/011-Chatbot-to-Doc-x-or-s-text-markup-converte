@@ -1,0 +1,16 @@
+services:
+  studio:
+    build: .
+    environment:
+      CLEAN_PASTE_TOKEN: ${CLEAN_PASTE_TOKEN:?Set CLEAN_PASTE_TOKEN before starting Docker}
+    ports:
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - studio_data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+
+volumes:
+  studio_data:

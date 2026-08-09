@@ -1,0 +1,109 @@
+openapi: 3.1.0
+info:
+  title: AI Clean Paste HAI Connector
+  version: 1.0.0
+  description: Bounded local-first text and markup to document conversion for HAI.
+servers:
+  - url: http://127.0.0.1:8765
+paths:
+  /health:
+    get:
+      operationId: cleanPasteHealth
+      security: []
+      responses:
+        "200":
+          description: Service health
+  /api/connectors/hai/v1/capabilities:
+    get:
+      operationId: cleanPasteCapabilities
+      responses:
+        "200":
+          description: Bounded converter capabilities
+        "401":
+          description: Authentication required
+  /api/connectors/hai/v1/convert:
+    post:
+      operationId: cleanPasteConvert
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 8
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConversionRequest"
+      responses:
+        "201":
+          description: Versioned artifacts created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConversionResponse"
+        "401":
+          description: Authentication required
+        "413":
+          description: Source exceeds configured size limit
+        "422":
+          description: Invalid source, template, or format
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    ConversionRequest:
+      type: object
+      required: [title, source]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 180
+        source:
+          type: string
+          minLength: 1
+        source_format:
+          type: string
+          enum: [auto, markdown, html, plain]
+          default: auto
+        formats:
+          type: array
+          minItems: 1
+          maxItems: 4
+          uniqueItems: true
+          default: [markdown, text]
+          items:
+            type: string
+            enum: [docx, pdf, markdown, text]
+        template_id:
+          type: string
+          default: standard_business_brief
+    Artifact:
+      type: object
+      required: [format, name, sha256, size, download_url]
+      properties:
+        format: {type: string}
+        name: {type: string}
+        sha256: {type: string}
+        size: {type: integer}
+        verification: {type: [object, "null"]}
+        download_url: {type: string}
+    ConversionResponse:
+      type: object
+      required: [schema, authority, project_id, version, artifacts, export_url]
+      properties:
+        schema: {const: ai-clean-paste-hai/v1}
+        authority: {const: artifact_generation_only}
+        project_id: {type: string}
+        version: {type: integer}
+        artifacts:
+          type: array
+          items: {$ref: "#/components/schemas/Artifact"}
+        export_url: {type: string}
+security:
+  - bearerAuth: []

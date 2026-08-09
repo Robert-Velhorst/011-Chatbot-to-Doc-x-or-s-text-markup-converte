@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Clean Paste</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>AI Clean Paste</h1>
+        <p>Portable formatting, kept on your device.</p>
+      </header>
+      <label class="switch-row master"><span>Clean AI copies</span><input id="enabled" type="checkbox" /><span class="switch" aria-hidden="true"></span></label>
+      <section aria-labelledby="providers-heading">
+        <h2 id="providers-heading">Supported sources</h2>
+        <div id="providers" class="provider-list"></div>
+      </section>
+      <section class="generic" aria-labelledby="generic-heading">
+        <h2 id="generic-heading">This site</h2>
+        <p id="site-name">Checking current tab…</p>
+        <button id="generic-toggle" type="button" disabled>Enable generic formatting</button>
+        <p class="hint">Only use this for an AI site not listed above. It never reads or stores copied text.</p>
+      </section>
+      <p id="status" role="status" aria-live="polite"></p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

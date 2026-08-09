@@ -1,0 +1,33 @@
+{
+  "name": "ai-clean-paste",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Local-first clipboard cleanup for AI responses.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "studio:dev": "vite --config studio-ui/vite.config.ts",
+    "studio:build": "vite build --config studio-ui/vite.config.ts",
+    "studio:preview": "vite preview --config studio-ui/vite.config.ts --host 127.0.0.1 --port 4173",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "tsc --noEmit && tsc --noEmit -p studio-ui/tsconfig.json"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
+    "lucide-react": "^0.536.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "vite": "^7.1.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.307",
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "esbuild": "^0.25.5",
+    "jsdom": "^26.1.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3"
+  }
+}
