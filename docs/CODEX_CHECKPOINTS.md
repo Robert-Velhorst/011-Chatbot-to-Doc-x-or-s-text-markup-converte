@@ -13,6 +13,6 @@
 | Windows/Docker packaging | complete and smoke-tested | `dist`, final report |
 | HAI/ngrok | connector complete; live ngrok externally gated | `integrations/hai`, `docs/NGROK.md`, final report |
 | Packaging | complete; all ZIP integrity checks and SHA-256 match | `outputs/SHA256SUMS.txt` |
-| Git commit/push | pending repository initialization/remote verification | final report |
+| Git commit/push | complete; canonical `main` pushed and GitHub quality workflow green | final report |
 
 Resume by running `scripts/verify.ps1`, `scripts/smoke-standalone.ps1`, and inspecting `outputs/SHA256SUMS.txt`. Never infer completion from package existence alone.

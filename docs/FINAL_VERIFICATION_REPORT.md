@@ -42,6 +42,8 @@ The PowerShell gates explicitly convert every nonzero native exit code into a sc
 
 The first GitHub run exposed an environment-specific test defect: the runner lacked Poppler and correctly returned `unverified`, while the test demanded `verified`. The test now verifies the truthful renderer-present and renderer-absent branches, and CI runs all Python tests rather than only the Studio folder.
 
+Replacement GitHub Actions run `31286236502` passed every step on implementation commit `ef84dce62f198f4adc6e4f8ecce56bb614780ce4`, including the full Python suite and both dependency checks.
+
 ## Windows 11 standalone evidence
 
 Host: Windows 11 build 26200, Python 3.12.13 build environment.
