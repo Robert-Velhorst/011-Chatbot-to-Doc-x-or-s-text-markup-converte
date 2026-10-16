@@ -5,7 +5,7 @@ RUN npm ci
 COPY studio-ui ./studio-ui
 RUN npm run studio:build
 
-FROM python:3.12-slim-bookworm AS runtime
+FROM python:3.15-slim-bookworm AS runtime
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 CLEAN_PASTE_HOST=0.0.0.0 CLEAN_PASTE_PORT=8765 CLEAN_PASTE_ENV=production
 RUN apt-get update && apt-get install -y --no-install-recommends poppler-utils && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
