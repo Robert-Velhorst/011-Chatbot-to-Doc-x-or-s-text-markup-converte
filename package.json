@@ -4,6 +4,10 @@
   "private": true,
   "description": "Local-first clipboard cleanup for AI responses.",
   "type": "module",
+  "engines": {
+    "node": "^26.12.0"
+  },
+  "packageManager": "npm@12.2.1",
   "scripts": {
     "build": "node scripts/build.mjs",
     "studio:dev": "vite --config studio-ui/vite.config.ts",
