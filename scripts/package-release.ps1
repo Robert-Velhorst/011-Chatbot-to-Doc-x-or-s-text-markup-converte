@@ -61,7 +61,6 @@ New-ReleaseZip $studio "AI-Clean-Paste-Studio-Windows-v$Version.zip"
 
 $hai = Join-Path $staging "hai"
 Copy-TreeFiles (Join-Path $repo "integrations\hai") $hai
-Copy-Item -LiteralPath (Join-Path $repo "docs\NGROK.md") -Destination (Join-Path $hai "NGROK.md")
 New-ReleaseZip $hai "AI-Clean-Paste-HAI-Connector-v$Version.zip"
 
 $source = Join-Path $staging "source"

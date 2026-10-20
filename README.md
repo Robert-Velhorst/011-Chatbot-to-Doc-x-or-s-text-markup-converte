@@ -10,7 +10,7 @@ It now has three connected surfaces:
 
 No surface sends document or clipboard content to a cloud service. There is no telemetry, clipboard history, copied-content logging, global key interception, or bundled AI provider key.
 
-The release also includes dependency-contained Windows 11 folders for the Document Studio and clipboard companion, a production-mode ngrok launcher, and a bounded HAI connector contract.
+The release also includes dependency-contained Windows 11 folders for the Document Studio and clipboard companion, and a bounded HAI connector contract.
 
 ## Fastest Windows 11 start
 
@@ -69,17 +69,11 @@ Supported providers are explicit and independently switchable. Unknown sites are
 
 See [src/windows/README.md](src/windows/README.md). Its automatic mode transforms only clipboard entries whose CF_HTML `SourceURL` matches a supported provider. It writes Unicode text, CF_HTML, and RTF together and suppresses self-generated clipboard loops.
 
-## HAI connector and ngrok
+## HAI connector
 
 The bounded HAI interface is documented in [integrations/hai/README.md](integrations/hai/README.md) with a checked-in OpenAPI contract. It can generate and return versioned artifacts but has no browser, messaging, Google, or workflow-execution authority.
 
-For a temporary authenticated HTTPS endpoint, generate a token as shown below and run:
-
-```powershell
-.\scripts\run-ngrok.ps1
-```
-
-The script keeps Studio bound to `127.0.0.1`, requires production mode plus a strong token, and stops its exact child process when the tunnel ends. See [docs/NGROK.md](docs/NGROK.md).
+Public hosting is planned for Hetzner; this repository does not provide a workstation tunnel. Follow the repository-root `DEPLOYMENT_TARGET.md` before configuring any hosted deployment.
 
 ## Verification
 
@@ -95,7 +89,7 @@ The gate runs TypeScript checks, extension tests/build, Studio build, Python lin
 
 - Default bind: `127.0.0.1:8765`.
 - A token is mandatory in production mode or for a non-loopback bind.
-- ngrok exposure is supported only through token-authenticated production mode; never expose development mode.
+- The service is intended for loopback operation on workstations; hosted exposure must use the reviewed Hetzner deployment and authenticated production configuration.
 - API rate limit: 60 requests/minute/client by default.
 - Source limit: 2 MB by default.
 - Unsafe link schemes and provider UI/script markup are removed.

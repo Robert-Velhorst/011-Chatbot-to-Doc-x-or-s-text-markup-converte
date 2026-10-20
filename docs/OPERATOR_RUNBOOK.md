@@ -17,7 +17,7 @@ Press `Ctrl+C` in the server terminal. The extension and tray companion each hav
 
 Set `CLEAN_PASTE_ENV=production`, a strong `CLEAN_PASTE_TOKEN`, and keep the host at `127.0.0.1` unless a reviewed reverse proxy and TLS boundary exist. The built-in server is not claimed safe for direct internet exposure.
 
-For the dependency-contained Windows build, double-click the Studio executable and use its tray menu to stop cleanly. For ngrok, follow `docs/NGROK.md`; never pool the converter with an unrelated endpoint. For HAI, use only the artifact-generation contract under `integrations/hai` and store the bearer token in HAI's approved local secret mechanism.
+For the dependency-contained Windows build, double-click the Studio executable and use its tray menu to stop cleanly. Public hosting targets Hetzner; follow the repository-root `DEPLOYMENT_TARGET.md` and keep workstation services loopback-bound. For HAI, use only the artifact-generation contract under `integrations/hai` and store the bearer token in HAI's approved local secret mechanism.
 
 ## Backup
 
@@ -30,7 +30,6 @@ Stop the server. Preserve the current data directory first. Restore the database
 ## Incident response
 
 - **Possible token leak:** stop, rotate token, restart, clear browser cookie.
-- **ngrok endpoint conflict:** preserve the other tunnel; do not use pooling. Free capacity intentionally or use an account with another endpoint.
 - **Repeated failed verification:** preserve source, generated artifact, and verification reason; do not label the artifact verified.
 - **Database error:** stop writes, backup the whole data directory, run SQLite integrity checks on a copy.
 - **Clipboard loop:** disable the tray companion; confirm only the expected process owns clipboard writes.
