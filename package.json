@@ -5,7 +5,7 @@
   "description": "Local-first clipboard cleanup for AI responses.",
   "type": "module",
   "engines": {
-    "node": "^26.12.0"
+    "node": "^26.12.1"
   },
   "packageManager": "npm@12.2.1",
   "scripts": {
