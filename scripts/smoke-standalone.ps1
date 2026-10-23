@@ -5,7 +5,7 @@ param(
 $ErrorActionPreference = "Stop"
 $repo = Split-Path -Parent $PSScriptRoot
 $exe = Join-Path $repo "dist\AI-Clean-Paste-Studio\AI-Clean-Paste-Studio.exe"
-$testData = Join-Path $repo "work\standalone-smoke"
+$testData = Join-Path $repo ("work\standalone-smoke-" + [guid]::NewGuid().ToString("N"))
 
 if (-not (Test-Path -LiteralPath $exe)) {
     throw "Standalone executable not found. Run .\scripts\build-standalone.ps1 first."
@@ -20,7 +20,7 @@ $env:CLEAN_PASTE_PORT = "$Port"
 $env:CLEAN_PASTE_ENV = "production"
 $env:CLEAN_PASTE_TOKEN = $testToken
 $env:CLEAN_PASTE_DATA_DIR = $testData
-$process = Start-Process -FilePath $exe -WorkingDirectory (Split-Path $exe) -WindowStyle Hidden -PassThru
+$process = Start-Process -FilePath $exe -ArgumentList @("--serve-only") -WorkingDirectory (Split-Path $exe) -WindowStyle Hidden -PassThru
 
 try {
     $ready = $false
@@ -40,6 +40,9 @@ try {
         throw "Standalone did not become healthy on port $Port."
     }
 
+    if ($health.database.version -ne "3.54.1" -or $health.runtime.python -ne "3.15.1") {
+        throw "Packaged Python/SQLite runtime differs from the stable baseline."
+    }
     $headers = @{ Authorization = "Bearer $testToken" }
     $capabilities = Invoke-RestMethod "http://127.0.0.1:$Port/api/connectors/hai/v1/capabilities" -Headers $headers
     $page = Invoke-WebRequest "http://127.0.0.1:$Port/" -UseBasicParsing
@@ -48,6 +51,8 @@ try {
         ProcessId      = $process.Id
         Health         = $health.status
         Version        = $health.version
+        SQLite         = $health.database.version
+        Python         = $health.runtime.python
         UIStatus       = $page.StatusCode
         UITitle        = [regex]::Match($page.Content, "<title>(.*?)</title>").Groups[1].Value
         HAIAuthority   = $capabilities.authority

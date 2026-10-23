@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import multiprocessing
 import os
+import sys
 import threading
 import time
 import urllib.request
@@ -56,6 +57,11 @@ def main() -> None:
             access_log=False,
         )
     )
+    if sys.argv[1:] == ["--serve-only"]:
+        server.run()
+        return
+    if sys.argv[1:]:
+        raise SystemExit("Only --serve-only is supported")
     server_thread = threading.Thread(target=server.run, name="clean-paste-server", daemon=True)
     server_thread.start()
     threading.Thread(target=_open_when_ready, args=(url,), daemon=True).start()

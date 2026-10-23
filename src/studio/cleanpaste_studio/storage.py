@@ -4,12 +4,13 @@ import hashlib
 import json
 import re
 import shutil
-import sqlite3
 import threading
 import uuid
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
+
+import apsw
 
 
 def _utcnow() -> str:
@@ -35,21 +36,25 @@ class StudioStorage:
 
     @contextmanager
     def connect(self):
-        connection = sqlite3.connect(self.db_path, timeout=15)
-        connection.row_factory = sqlite3.Row
-        connection.execute("PRAGMA foreign_keys = ON")
-        connection.execute("PRAGMA synchronous = NORMAL")
+        if tuple(map(int, apsw.sqlite_lib_version().split("."))) < (3, 54, 1):
+            raise RuntimeError("SQLite 3.54.1 or newer is required for Studio storage")
+        connection = apsw.Connection(str(self.db_path))
         try:
-            yield connection
-            connection.commit()
+            connection.set_busy_timeout(15000)
+            connection.pragma("foreign_keys", True)
+            connection.pragma("synchronous", "NORMAL")
+            connection.pragma("journal_mode", "WAL")
+            connection.row_trace = lambda cursor, row: dict(
+                zip((column[0] for column in cursor.get_description()), row, strict=True)
+            )
+            with connection:
+                yield connection
         finally:
             connection.close()
 
     def _initialize(self) -> None:
         with self.connect() as db:
-            db.execute("PRAGMA journal_mode = WAL")
-            db.execute("PRAGMA synchronous = NORMAL")
-            db.executescript(
+            db.execute(
                 """
                 CREATE TABLE IF NOT EXISTS projects (
                     id TEXT PRIMARY KEY,
@@ -276,7 +281,7 @@ class StudioStorage:
 
     @staticmethod
     def _audit(
-        db: sqlite3.Connection, event_type: str, project_id: str | None, version: int | None
+        db: apsw.Connection, event_type: str, project_id: str | None, version: int | None
     ) -> None:
         # Privacy boundary: event metadata only. Never source content, title, URL, filename, or hash.
         db.execute(
@@ -285,7 +290,7 @@ class StudioStorage:
         )
 
     @staticmethod
-    def _artifact_row(row: sqlite3.Row) -> dict:
+    def _artifact_row(row: dict) -> dict:
         result = dict(row)
         result["verification"] = json.loads(result.pop("verification_json") or "null")
         return result

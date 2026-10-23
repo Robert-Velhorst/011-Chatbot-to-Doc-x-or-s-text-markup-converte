@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import apsw
+
+import platform
 import mimetypes
 import os
 import sys
@@ -90,7 +93,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/health")
     def health() -> dict:
-        return {"status": "ok", "version": __version__}
+        return {
+            "status": "ok",
+            "version": __version__,
+            "database": {"engine": "SQLite", "version": apsw.sqlite_lib_version()},
+            "runtime": {"python": platform.python_version()},
+        }
 
     @app.get("/readiness")
     def readiness() -> dict:

@@ -7,6 +7,7 @@ import tempfile
 from dataclasses import replace
 from pathlib import Path
 
+import apsw
 import uvicorn
 
 from .app import create_app
@@ -45,6 +46,8 @@ def doctor() -> int:
 
     checks = {
         "python": sys.version.split()[0],
+        "sqlite": apsw.sqlite_lib_version(),
+        "sqlite_baseline": tuple(map(int, apsw.sqlite_lib_version().split("."))) >= (3, 54, 1),
         "pdftoppm": shutil.which("pdftoppm") or "bundled lookup at runtime",
         "data_directory_writable": False,
     }
@@ -56,7 +59,7 @@ def doctor() -> int:
     except OSError:
         pass
     print(json.dumps(checks, indent=2))
-    return 0 if checks["data_directory_writable"] else 1
+    return 0 if checks["data_directory_writable"] and checks["sqlite_baseline"] else 1
 
 
 def convert_file(args) -> int:

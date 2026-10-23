@@ -24,14 +24,13 @@ Windows PowerShell:
 .\scripts\run-local.ps1
 ```
 
-Then open <http://127.0.0.1:8765>. The first run creates `.venv`, installs the locked project ranges, builds the React UI, and stores runtime data under `runtime/studio` unless `CLEAN_PASTE_DATA_DIR` is set.
+Then open <http://127.0.0.1:8765>. The first run creates `.venv`, uses Python 3.15.1 and installs the exact hashed dependencies from `uv.lock`, builds the React UI, and stores runtime data under `runtime/studio` unless `CLEAN_PASTE_DATA_DIR` is set.
 
 Manual setup:
 
 ```powershell
-py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
-npm.cmd install
+uv sync --frozen --python 3.15.1 --extra dev
+npm.cmd ci --ignore-scripts
 npm.cmd run studio:build
 $env:CLEAN_PASTE_DATA_DIR = "runtime/studio"
 .\.venv\Scripts\clean-paste-studio.exe serve
@@ -128,3 +127,7 @@ $env:CLEAN_PASTE_TOKEN = [BitConverter]::ToString($tokenBytes).Replace("-", "")
 - Native destination smoke tests in signed-in Gmail, Notion, Google Docs, Word, and Outlook remain environment/user-session acceptance gates; automated tests do not claim those sessions were exercised.
 - This repository does not yet declare an owner-approved distribution license.
 - The HAI adapter files are complete on this side; registration in the separate HAI repository remains an owner-reviewed integration step.
+
+## Stable runtime and dependency baseline
+
+Development requires Node 26.12.1, npm 12.2.1, Python 3.15.1 and uv 0.13.5. See [the October stable-upgrade record](docs/STABLE_DEPENDENCIES_2026-10.md). Studio uses APSW 3.54.1.0 with SQLite 3.54.1, independently of the older SQLite bundled with CPython. Preserve the complete data directory and rehearse backup restoration before upgrading real data. No production migration or Hetzner cutover is established by a source build.
