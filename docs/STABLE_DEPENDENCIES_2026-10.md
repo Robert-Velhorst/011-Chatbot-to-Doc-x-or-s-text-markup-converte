@@ -4,7 +4,7 @@
 
 All 13 original JavaScript declarations were compared with official npm latest metadata and pinned exactly. Lucide React is 1.61.0, Vite 8.3.5 and Chrome types 0.3.6; the remaining direct versions were already current. Node targets 26.12.1 and npm 12.2.1.
 
-Python direct and build requirements were compared with public PyPI metadata and pinned, including FastAPI 0.161.1, Uvicorn 0.54.0, Pydantic 2.14.1, ReportLab 5.1.0, Pillow 13.0.0, pypdf 6.21.2, pytest 9.1.1, Ruff 0.17.2, Hatchling 1.32.4 and PyInstaller 6.22.3. `uv.lock` records exact transitive versions and artifact hashes. Normal launch and packaging scripts use Python 3.15.1 and the frozen lock; they do not keep using the previous Python 3.12 launcher.
+Python direct and build requirements were compared with public PyPI metadata and pinned, including FastAPI 0.161.1, Uvicorn 0.54.0, Pydantic 2.14.1, ReportLab 5.1.0, Pillow 13.0.0, pypdf 6.21.2, pytest 9.1.1, Ruff 0.17.2, Hatchling 1.32.4 and PyInstaller 6.22.3. `uv.lock` records exact transitive versions and artifact hashes. The test client uses httpx2 2.16.0, following the current [Starlette TestClient contract](https://starlette.dev/testclient/), instead of its deprecated httpx fallback. Normal launch and packaging scripts use Python 3.15.1 and the frozen lock; they do not keep using the previous Python 3.12 launcher.
 
 ## Actual database engine
 
