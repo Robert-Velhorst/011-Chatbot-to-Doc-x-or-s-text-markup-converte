@@ -21,13 +21,12 @@ def test_actual_engine_and_connection_guards(tmp_path: Path):
 
 def test_transaction_failure_rolls_back_all_statements(tmp_path: Path):
     storage = StudioStorage(tmp_path / "data")
-    with pytest.raises(apsw.ConstraintError):
-        with storage.connect() as db:
-            db.execute("insert into audit_events(event_type,created_at) values('rollback','now')")
-            db.execute(
-                "insert into versions(project_id,version,source_format,source_hash,created_at) "
-                "values('missing-parent',1,'plain','synthetic','now')"
-            )
+    with pytest.raises(apsw.ConstraintError), storage.connect() as db:
+        db.execute("insert into audit_events(event_type,created_at) values('rollback','now')")
+        db.execute(
+            "insert into versions(project_id,version,source_format,source_hash,created_at) "
+            "values('missing-parent',1,'plain','synthetic','now')"
+        )
     assert "rollback" not in storage.audit_summary()
 
 
@@ -57,6 +56,7 @@ def test_legacy_database_upgrade_and_native_backup_restore(tmp_path: Path):
             "INSERT INTO versions VALUES(?,?,?,?,?)",
             (project_id, 1, "plain", "synthetic", "then"),
         )
+    legacy.close()
     storage = StudioStorage(original)
     assert storage.get_project(project_id)["current_version"] == 1
     assert storage.source(project_id, 1) == "Synthetic legacy document"

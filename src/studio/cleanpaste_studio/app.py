@@ -1,15 +1,14 @@
 from __future__ import annotations
 
-import apsw
-
-import platform
 import mimetypes
 import os
+import platform
 import sys
 from pathlib import Path
 from typing import Literal
 from urllib.parse import quote
 
+import apsw
 from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
