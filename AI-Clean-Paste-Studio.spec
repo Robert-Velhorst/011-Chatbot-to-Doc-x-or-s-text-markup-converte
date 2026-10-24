@@ -5,6 +5,7 @@ from PyInstaller.utils.hooks import collect_submodules
 
 root = Path(SPECPATH)
 hidden = collect_submodules("cleanpaste_studio") + [
+    "apsw",
     "win32com.client",
     "pythoncom",
     "pywintypes",

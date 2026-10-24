@@ -1,0 +1,13 @@
+**
+!package.json
+!package-lock.json
+!pyproject.toml
+!uv.lock
+!README.md
+!studio-ui/
+!studio-ui/**
+studio-ui/dist/
+!src/
+!src/studio/
+!src/studio/**
+**/__pycache__/

@@ -48,7 +48,7 @@ The build did not contain a document-conversion product, web UI, versioned stora
 
 ## Dependency and supply-chain review
 
-Runtime dependencies are bounded in `pyproject.toml`; frontend dependencies are locked in `package-lock.json`. The CI uses Node.js 26.12.0, npm 12.2.1, and Python 3.15.0. Direct runtime libraries are FastAPI/Starlette/Pydantic/Uvicorn, markdown-it-py, python-docx/lxml, ReportLab, Pillow, and pypdf. The frontend uses React, Vite, and Lucide. The extension keeps packaged MV3 code only.
+Direct Python dependencies are pinned in `pyproject.toml` and hashed in `uv.lock`; frontend dependencies are exact and locked in `package-lock.json`. CI targets Node.js 26.12.1, npm 12.2.1 and Python 3.15.1. Studio storage uses APSW 3.54.1.0 / SQLite 3.54.1; CPython's own SQLite is not used for the app database. Direct runtime libraries are FastAPI/Starlette/Pydantic/Uvicorn, markdown-it-py, python-docx/lxml, ReportLab, Pillow, and pypdf. The frontend uses React, Vite, and Lucide. The extension keeps packaged MV3 code only.
 
 No package is loaded from a CDN at runtime. No runtime analytics or error-reporting SDK exists. The Docker runtime drops root, uses a read-only root filesystem in Compose, and persists only `/data`. An owner-approved repository license remains unresolved; no distribution license is claimed.
 

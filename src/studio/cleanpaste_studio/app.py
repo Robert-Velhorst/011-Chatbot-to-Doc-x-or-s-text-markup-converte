@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import mimetypes
 import os
+import platform
 import sys
 from pathlib import Path
 from typing import Literal
 from urllib.parse import quote
 
+import apsw
 from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -90,7 +92,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/health")
     def health() -> dict:
-        return {"status": "ok", "version": __version__}
+        return {
+            "status": "ok",
+            "version": __version__,
+            "database": {"engine": "SQLite", "version": apsw.sqlite_lib_version()},
+            "runtime": {"python": platform.python_version()},
+        }
 
     @app.get("/readiness")
     def readiness() -> dict:

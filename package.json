@@ -5,7 +5,7 @@
   "description": "Local-first clipboard cleanup for AI responses.",
   "type": "module",
   "engines": {
-    "node": "^26.12.0"
+    "node": "^26.12.1"
   },
   "packageManager": "npm@12.2.1",
   "scripts": {
@@ -18,21 +18,21 @@
     "check": "tsc --noEmit && tsc --noEmit -p studio-ui/tsconfig.json"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "^6.1.2",
-    "lucide-react": "^1.58.0",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "vite": "^8.3.4"
+    "@vitejs/plugin-react": "6.1.2",
+    "lucide-react": "1.61.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "vite": "8.3.5"
   },
   "devDependencies": {
-    "@types/chrome": "^0.3.5",
-    "@types/node": "^26.6.5",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "esbuild": "^0.28.2",
-    "jsdom": "^30.1.3",
-    "typescript": "^7.0.2",
-    "vitest": "^5.0.5"
+    "@types/chrome": "0.3.6",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "esbuild": "0.28.2",
+    "jsdom": "30.1.3",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
   },
   "allowScripts": {
     "esbuild@0.28.2": true

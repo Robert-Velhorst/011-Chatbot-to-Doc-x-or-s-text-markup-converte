@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import multiprocessing
 import os
+import sys
 import threading
 import time
 import urllib.request
 import webbrowser
 from pathlib import Path
 
-import pystray
 import uvicorn
 from PIL import Image, ImageDraw
 
@@ -36,6 +36,13 @@ def _tray_image() -> Image.Image:
 
 def main() -> None:
     multiprocessing.freeze_support()
+    arguments = sys.argv[1:]
+    if arguments[:2] == ["-m", "cleanpaste_studio.word_render_helper"]:
+        from cleanpaste_studio.word_render_helper import main as render_main
+
+        raise SystemExit(render_main(arguments[2:]))
+    if arguments not in ([], ["--serve-only"]):
+        raise SystemExit("Only --serve-only and the internal Word renderer are supported")
     local_app_data = Path(os.environ.get("LOCALAPPDATA", Path.home()))
     os.environ.setdefault("CLEAN_PASTE_DATA_DIR", str(local_app_data / "AI Clean Paste" / "Studio"))
     os.environ.setdefault("CLEAN_PASTE_HOST", "127.0.0.1")
@@ -56,6 +63,9 @@ def main() -> None:
             access_log=False,
         )
     )
+    if arguments == ["--serve-only"]:
+        server.run()
+        return
     server_thread = threading.Thread(target=server.run, name="clean-paste-server", daemon=True)
     server_thread.start()
     threading.Thread(target=_open_when_ready, args=(url,), daemon=True).start()
@@ -66,6 +76,8 @@ def main() -> None:
     def stop_studio(icon, _item=None) -> None:
         server.should_exit = True
         icon.stop()
+
+    import pystray
 
     icon = pystray.Icon(
         "ai-clean-paste-studio",
